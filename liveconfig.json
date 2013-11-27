@@ -1,16 +1,16 @@
 {
 	"server" : {
-		"port"	: 8080,
-		"name"	: "deployinator"
+		"port"	: 80,
+		"name"	: "notinator"
 	},
 	"log" : {
-		"name"	: "deployinator",
+		"name"	: "notinator",
 		"use"	: "File",
-		"dir"	: "/var/log/deployinator/",
-		"file"	: "deployinator.log"
+		"dir"	: "/var/log/notinator/",
+		"file"	: "notinator.log"
 	},
 	"mongo" : { 
-		"server": "mongo.forrent.com",
+		"server": "localhost",
 		"port"  : 27017
 	}
 }
