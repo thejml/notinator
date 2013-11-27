@@ -44,7 +44,7 @@ function respond(req, res, next) {
 
 	// Saving it to the database.
 	deployment.findOneAndUpdate({ server: req.params.server, release: req.params.release, codebase: req.params.codebase }, incomingDeployment, options, function (err) {
-		if (err) {console.log ('Error on save!')} else {console.log ('Saved!')}
+		if (err) {res.send('Error on save!')} else {res.send('Saved!')}
 	});
   	res.send('hello ' + req.params.server);
 }
