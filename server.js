@@ -1,5 +1,7 @@
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var IPADDRESS = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var MONGOIP = process.env.OPENSHIFT_MONGODB_DB_HOST || '127.0.0.1';
+var MONGOPORT = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
 
 var mongoose = require ("mongoose"); 
 var restify = require ("restify");
@@ -81,7 +83,7 @@ server.head('/deploy/:name', respond);
 
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.
-var uristring = 'mongodb://'+config.mongo.server+'/DeployDB';
+var uristring = 'mongodb://'+MONGOIP+':'+MONGOPORT+'/notinator';
 
 // Makes connection asynchronously.  Mongoose will queue up database
 // operations and release them when the connection is complete.
