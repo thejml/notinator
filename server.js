@@ -1,3 +1,6 @@
+var PORT = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var IPADDRESS = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+
 var mongoose = require ("mongoose"); 
 var restify = require ("restify");
 var deploySchema = new mongoose.Schema({
@@ -90,7 +93,7 @@ mongoose.connect(uristring, function (err, res) {
 
 // Deployment Schema setup, Mongo connected, time to start listening
 
-		server.listen(config.server.port, function() {
+		server.listen(PORT, IPADDRESS, function() {
 		  	console.log('%s listening at %s', server.name, server.url);
 		});
 
