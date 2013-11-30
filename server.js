@@ -65,7 +65,7 @@ function displayNote(req,res,next) {
 		if (validateUser(req.authorization.basic,users)) {
 			res.send(req.params.nname+" thanks "+req.params.uname);
 		} else { res.send("Sorry, Credentials Denied"); }
-	}
+	});
 //	return deployment.aggregate({key: {"server":1},reduce: function (curr,result) {result.total++; if(curr.datestamp>result.datestamp) { result.datestamp=curr.datestamp;} },initial: {total:0, datestamp: 0} });
 }
 
