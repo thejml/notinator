@@ -7,7 +7,7 @@ var mongoose = require ("mongoose");
 var restify = require ("restify");
 var deploySchema = new mongoose.Schema({
 	note: { type: String },
-	data: { type: Buffer },
+	data: { type: String },
 	datestamp: { type: Number, min: 0 },
 	user: { type: String },
 	sharing: { type: Number },
@@ -46,7 +46,7 @@ function addNote(req, res, next) {
 	deployment.findOneAndUpdate({ name: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
 		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
 	});
-  	res.send('Note '+req.params+' saved.');
+  	res.send('Note '+req.params.notinator+' saved.');
 }
 
 function validateUser(input,db) {
