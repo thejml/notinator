@@ -26,16 +26,15 @@ var deployment = mongoose.model('Deployments', deploySchema);
 var users = mongoose.model('Userinfo', userSchema);
 	
 function addNote(req, res, next) {
-	console.log(req.params);	
-	if (req.params.server === undefined) {
-	    return next(new restify.InvalidArgumentError('Server must be supplied'))
+	if ((req.params.nname === undefined) || (req.params.uname === undefined)) {
+	    return next(new restify.InvalidArgumentError('both User Name and Note Name must be supplied'))
   	}
 	var options = {upsert: true};
 //	var latest=deployment.aggregate([{ $group: {_id: { server: req.params.server }, mostRecent: { $max: "$datestamp"}}}]);
 // Do we have one in here already?
 	// Creating one user.
 	var incomingDeployment = {
-		release: req.params.release,
+		data: req.params.data,
 		datestamp: Date.now(),
 		md5: req.params.md5,
 		location: req.params.location,
@@ -45,11 +44,13 @@ function addNote(req, res, next) {
 		environment: req.params.name
 	};
 
+res.send(req.params);
+
 	// Saving it to the database.
-	deployment.findOneAndUpdate({ server: req.params.server, release: req.params.release, codebase: req.params.codebase }, incomingDeployment, options, function (err) {
-		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
-	});
-  	res.send('Thanks ' + req.params.server);
+//	deployment.findOneAndUpdate({ server: req.params.server, release: req.params.release, codebase: req.params.codebase }, incomingDeployment, options, function (err) {
+//		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
+//	});
+//  	res.send('Thanks ' + req.params.server);
 }
 
 function validateUser(input,db) {
@@ -59,14 +60,18 @@ function validateUser(input,db) {
 }
 
 function displayNote(req,res,next) {
-	res.send(req.username);
+/*	res.send(req.username);
 	res.send(req.authorization.basic.password);
 	users.find({ username:req.username }, function (err,users) {
 		if (validateUser(req.authorization.basic,users)) {
 			res.send(req.params.nname+" thanks "+req.params.uname);
 		} else { res.send("Sorry, Credentials Denied"); }
+	});*/
+	deployment.find({ user: req.params.uname, note: req.params.nname },function (err,note) {
+		res.send(note);
 	});
-//	return deployment.aggregate({key: {"server":1},reduce: function (curr,result) {result.total++; if(curr.datestamp>result.datestamp) { result.datestamp=curr.datestamp;} },initial: {total:0, datestamp: 0} });
+	
+	//	return deployment.aggregate({key: {"server":1},reduce: function (curr,result) {result.total++; if(curr.datestamp>result.datestamp) { result.datestamp=curr.datestamp;} },initial: {total:0, datestamp: 0} });
 }
 
 function listLatestPerServer(req, res, next) {
