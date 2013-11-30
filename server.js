@@ -11,12 +11,19 @@ var deploySchema = new mongoose.Schema({
 	user: { type: String },
 	sharing: { type: Number },
 });
-// Get environment currently running under
-var env = "live";
+
+var userSchema = new mongoose.Schema)({
+	username: { type: String, trim: true },
+	password: { type: String },
+	joindate: { type: Number, min: 0 },
+	lastdate: { type: Number, min: 0 } 
+});
+
 // // create our configuration object by calling configure based on the environment desired.
 var config = require('./config.js').configure(env);
 
 var deployment = mongoose.model('Deployments', deploySchema);
+var users = mongoose.model('Userinfo', userSchema);
 	
 function addNote(req, res, next) {
 	console.log(req.params);	
@@ -45,8 +52,20 @@ function addNote(req, res, next) {
   	res.send('Thanks ' + req.params.server);
 }
 
+function validateUser(input,db) {
+	if ((input.username==db.username) && (input.password==db.password)) {
+		return true;
+	}
+}
+
 function displayNote(req,res,next) {
-	res.send(req.params.nname+" thanks "+req.params.uname);
+	res.send(req.username);
+	res.send(req.authorization.basic.password);
+	users.find({ username:req.username }, function (err,users) {
+		if (validateUser(req.authorization.basic,users)) {
+			res.send(req.params.nname+" thanks "+req.params.uname);
+		} else { res.send("Sorry, Credentials Denied"); }
+	}
 //	return deployment.aggregate({key: {"server":1},reduce: function (curr,result) {result.total++; if(curr.datestamp>result.datestamp) { result.datestamp=curr.datestamp;} },initial: {total:0, datestamp: 0} });
 }
 
@@ -61,12 +80,13 @@ function deleteNote(req,res,next) { }
 
 var server = restify.createServer();
 server.use(restify.bodyParser());
-server.get('/note/_all', displayAllNotes);
+server.use(restify.authorizationParser());
+server.get('/note/:uname/all', displayAllNotes);
 server.get('/note/:uname/:nname', displayNote);
-server.get('/delete/:uname', deleteNote);
-server.post('/add/:uname', addNote);
-server.post('/update/:uname', addNote);
-server.head('/note/:uname', addNote);
+server.get('/delete/:uname/:nname', deleteNote);
+server.post('/add/:uname/:nname', addNote);
+server.post('/update/:uname/:nname', addNote);
+server.head('/note/:uname/:nname', addNote);
 
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.
