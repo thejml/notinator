@@ -7,7 +7,7 @@ var mongoose = require ("mongoose");
 var restify = require ("restify");
 var deploySchema = new mongoose.Schema({
 	note: { type: String },
-	data: { type: String, trim: true },
+	data: { type: Buffer },
 	datestamp: { type: Number, min: 0 },
 	user: { type: String },
 	sharing: { type: Number },
@@ -46,7 +46,7 @@ function addNote(req, res, next) {
 	deployment.findOneAndUpdate({ name: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
 		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
 	});
-  	res.send('Note '+req.params.nname+' saved.');
+  	res.send('Note '+req.params+' saved.');
 }
 
 function validateUser(input,db) {
@@ -64,7 +64,7 @@ function displayNote(req,res,next) {
 		} else { res.send("Sorry, Credentials Denied"); }
 	});*/
 	deployment.find({ user: req.params.uname, note: req.params.nname },function (err,note) {
-		res.send(note);
+		res.send(note.data);
 	});
 	
 	//	return deployment.aggregate({key: {"server":1},reduce: function (curr,result) {result.total++; if(curr.datestamp>result.datestamp) { result.datestamp=curr.datestamp;} },initial: {total:0, datestamp: 0} });
