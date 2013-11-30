@@ -27,6 +27,7 @@ var deployment = mongoose.model('Deployments', deploySchema);
 var users = mongoose.model('Userinfo', userSchema);
 	
 function addNote(req, res, next) {
+    console.log("Note: %j",req.params);
 	if ((req.params.nname === undefined) || (req.params.uname === undefined)) {
 	    return next(new restify.InvalidArgumentError('both User Name and Note Name must be supplied'))
   	}
