@@ -20,7 +20,7 @@ var userSchema = new mongoose.Schema({
 });
 
 // // create our configuration object by calling configure based on the environment desired.
-var config = require('./config.js').configure(env);
+//var config = require('./config.js').configure(env);
 
 var deployment = mongoose.model('Deployments', deploySchema);
 var users = mongoose.model('Userinfo', userSchema);
