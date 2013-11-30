@@ -33,24 +33,18 @@ function addNote(req, res, next) {
 //	var latest=deployment.aggregate([{ $group: {_id: { server: req.params.server }, mostRecent: { $max: "$datestamp"}}}]);
 // Do we have one in here already?
 	// Creating one user.
-	var incomingDeployment = {
-		data: req.params.data,
+	var incomingNote = {
+		data: req.params.notinator,
 		datestamp: Date.now(),
-		md5: req.params.md5,
-		location: req.params.location,
-  		codebase: req.params.codebase,
-		server: req.params.server,
-		success: 1,
-		environment: req.params.name
+		user: req.params.uname,
+		sharing: 1,
 	};
 
-res.send(req.params);
-
 	// Saving it to the database.
-//	deployment.findOneAndUpdate({ server: req.params.server, release: req.params.release, codebase: req.params.codebase }, incomingDeployment, options, function (err) {
-//		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
-//	});
-//  	res.send('Thanks ' + req.params.server);
+	deployment.findOneAndUpdate({ nname: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
+		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
+	});
+  	res.send('Note '+req.params.nname+' saved.');
 }
 
 function validateUser(input,db) {
