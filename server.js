@@ -6,6 +6,7 @@ var MONGOPORT = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
 var mongoose = require ("mongoose"); 
 var restify = require ("restify");
 var deploySchema = new mongoose.Schema({
+	note: { type: String },
 	data: { type: String, trim: true },
 	datestamp: { type: Number, min: 0 },
 	user: { type: String },
@@ -34,6 +35,7 @@ function addNote(req, res, next) {
 // Do we have one in here already?
 	// Creating one user.
 	var incomingNote = {
+	    name: req.params.nname,
 		data: req.params.notinator,
 		datestamp: Date.now(),
 		user: req.params.uname,
@@ -41,7 +43,7 @@ function addNote(req, res, next) {
 	};
 
 	// Saving it to the database.
-	deployment.findOneAndUpdate({ nname: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
+	deployment.findOneAndUpdate({ name: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
 		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
 	});
   	res.send('Note '+req.params.nname+' saved.');
