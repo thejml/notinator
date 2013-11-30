@@ -12,7 +12,7 @@ var deploySchema = new mongoose.Schema({
 	sharing: { type: Number },
 });
 
-var userSchema = new mongoose.Schema)({
+var userSchema = new mongoose.Schema({
 	username: { type: String, trim: true },
 	password: { type: String },
 	joindate: { type: Number, min: 0 },
