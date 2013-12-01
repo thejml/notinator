@@ -37,7 +37,7 @@ function addNote(req, res, next) {
 	// Creating one user.
 	var incomingNote = {
 	    name: req.params.nname,
-		data: req.params.notinator,
+		data: req.body,
 		datestamp: Date.now(),
 		user: req.params.uname,
 		sharing: 1,
@@ -47,7 +47,7 @@ function addNote(req, res, next) {
 	deployment.findOneAndUpdate({ name: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
 		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
 	});
-  	res.send('Note '+req.params.nname+' saved.');
+  	res.send('Note '+req.body+' saved.');
 }
 
 function validateUser(input,db) {
