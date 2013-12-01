@@ -47,7 +47,7 @@ function addNote(req, res, next) {
 	deployment.findOneAndUpdate({ name: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
 		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
 	});
-  	res.send('Note '+req.params.notinator+' saved.');
+  	res.send('Note '+req.params.nname+' saved.');
 }
 
 function validateUser(input,db) {
@@ -81,7 +81,7 @@ function displayAllNotes(req,res,next) { }
 function deleteNote(req,res,next) { }
 
 var server = restify.createServer();
-server.use(restify.bodyParser());
+server.use(restify.bodyParser({ mapParams: false }));
 server.use(restify.authorizationParser());
 server.get('/note/:uname/all', displayAllNotes);
 server.get('/note/:uname/:nname', displayNote);
