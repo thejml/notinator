@@ -81,7 +81,7 @@ function displayAllNotes(req,res,next) { }
 function deleteNote(req,res,next) { }
 
 var server = restify.createServer();
-server.use(restify.bodyParser({ mapParams: false }));
+server.use(restify.bodyParser({ mapParams: true }));
 server.use(restify.authorizationParser());
 server.get('/note/:uname/all', displayAllNotes);
 server.get('/note/:uname/:nname', displayNote);
