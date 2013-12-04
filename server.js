@@ -66,7 +66,7 @@ function displayNote(req,res,next) {
 	});*/
 
 console.log(req.params.uname+" "+req.params.nname);
-	deployment.find({ user: req.params.uname, name: req.params.nname },function (err,note) {
+	deployment.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
 		console.log("Found %j",note.data);
 		res.send(note.data+note.datestamp+note.name);
 	});
