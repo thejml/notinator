@@ -67,6 +67,7 @@ function displayNote(req,res,next) {
 
 console.log(req.params.uname+" "+req.params.nname);
 	deployment.find({ user: req.params.uname, name: req.params.nname },function (err,note) {
+		console.log("Found %j",note);
 		res.send(note.data);
 	});
 	
