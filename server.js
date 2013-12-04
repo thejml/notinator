@@ -7,7 +7,7 @@ var mongoose = require ("mongoose");
 var restify = require ("restify");
 var deploySchema = new mongoose.Schema({
 	note: { type: String },
-	data: { type: String },
+	data: { type: Buffer },
 	datestamp: { type: Number, min: 0 },
 	user: { type: String },
 	sharing: { type: Number },
@@ -65,9 +65,8 @@ function displayNote(req,res,next) {
 		} else { res.send("Sorry, Credentials Denied"); }
 	});*/
 
-console.log(req.params.uname+" "+req.params.nname);
 	deployment.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
-		res.send(note.data.substring(1,note.data.length-1));
+		res.send(note.data);
 	});
 }
 
