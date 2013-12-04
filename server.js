@@ -67,7 +67,7 @@ function displayNote(req,res,next) {
 
 console.log(req.params.uname+" "+req.params.nname);
 	deployment.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
-		res.send(note.data.substring(1,note.data.strlen()-1));
+		res.send(note.data.substring(1,note.data.length-1));
 	});
 }
 
