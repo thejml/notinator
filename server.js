@@ -67,11 +67,8 @@ function displayNote(req,res,next) {
 
 console.log(req.params.uname+" "+req.params.nname);
 	deployment.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
-		console.log("Found %j",note.data);
-		res.send(note.data+note.datestamp+note.name);
+		res.send(note.data.substring(1,note.data.strlen()-1));
 	});
-	
-	//	return deployment.aggregate({key: {"server":1},reduce: function (curr,result) {result.total++; if(curr.datestamp>result.datestamp) { result.datestamp=curr.datestamp;} },initial: {total:0, datestamp: 0} });
 }
 
 function listLatestPerServer(req, res, next) {
