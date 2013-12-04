@@ -64,7 +64,7 @@ function displayNote(req,res,next) {
 			res.send(req.params.nname+" thanks "+req.params.uname);
 		} else { res.send("Sorry, Credentials Denied"); }
 	});*/
-	deployment.find({ user: req.params.uname, note: req.params.nname },function (err,note) {
+	deployment.find({ user: req.params.uname, name: req.params.nname },function (err,note) {
 		res.send(note.data);
 	});
 	
