@@ -66,8 +66,12 @@ function displayNote(req,res,next) {
 	});*/
 
 	deployment.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
-		res.send(note.data);
+		res.send(note.data.toString());
 	});
+}
+
+function listNotes(req,res,next) { 
+	deployment.find({ user: req.params.uname }, function (err, note) { res.send(note); });
 }
 
 function listLatestPerServer(req, res, next) {
@@ -88,7 +92,7 @@ server.get('/delete/:uname/:nname', deleteNote);
 server.post('/add/:uname/:nname', addNote);
 server.post('/update/:uname/:nname', addNote);
 server.head('/note/:uname/:nname', addNote);
-
+server.get('/list/:uname', listNotes);
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.
 var uristring = 'mongodb://noteuser:myP455word@'+MONGOIP+':'+MONGOPORT+'/notinator';
