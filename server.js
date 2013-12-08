@@ -7,7 +7,7 @@ var mongoose = require ("mongoose");
 var restify = require ("restify");
 var deploySchema = new mongoose.Schema({
 	note: { type: String },
-	data: { type: String },
+	data: { type: Buffer },
 	datestamp: { type: Number, min: 0 },
 	user: { type: String },
 	sharing: { type: Number },
@@ -66,7 +66,7 @@ function displayNote(req,res,next) {
 	});*/
 
 	deployment.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
-		res.send(note.data);
+		res.send(note.data.toString());
 	});
 }
 
