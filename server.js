@@ -5,9 +5,9 @@ var MONGOPORT = process.env.OPENSHIFT_MONGODB_DB_PORT || 27017;
 
 var mongoose = require ("mongoose"); 
 var restify = require ("restify");
-var deploySchema = new mongoose.Schema({
+var noteSchema = new mongoose.Schema({
 	note: { type: String },
-	data: { type: Buffer },
+	data: { type: String },
 	datestamp: { type: Number, min: 0 },
 	user: { type: String },
 	sharing: { type: Number },
@@ -23,20 +23,18 @@ var userSchema = new mongoose.Schema({
 // // create our configuration object by calling configure based on the environment desired.
 //var config = require('./config.js').configure(env);
 
-var deployment = mongoose.model('Deployments', deploySchema);
+var note = mongoose.model('Notess', noteSchema);
 var users = mongoose.model('Userinfo', userSchema);
 	
 function addNote(req, res, next) {
-    console.log("Note: %j",req.body);
 	if ((req.params.nname === undefined) || (req.params.uname === undefined)) {
 	    return next(new restify.InvalidArgumentError('both User Name and Note Name must be supplied'))
   	}
 	var options = {upsert: true};
-//	var latest=deployment.aggregate([{ $group: {_id: { server: req.params.server }, mostRecent: { $max: "$datestamp"}}}]);
-// Do we have one in here already?
-	// Creating one user.
+
+	// Creating one note.
 	var incomingNote = {
-	    name: req.params.nname,
+	    	name: req.params.nname,
 		data: req.body,
 		datestamp: Date.now(),
 		user: req.params.uname,
@@ -44,10 +42,14 @@ function addNote(req, res, next) {
 	};
 
 	// Saving it to the database.
-	deployment.findOneAndUpdate({ name: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
-		if (err) {console.log('Error on save'+err);} else { console.log('Saved!');}
+	note.findOneAndUpdate({ name: req.params.nname, user: req.params.uname }, incomingNote, options, function (err) {
+		if (err) {
+			console.log('Error on save'+err);
+		} else { 
+			console.log(Date.now()+' User: '+req.params.uname+' Note: '+req.params.name+' saved!');
+  			res.send('Note '+req.params.name+' saved.');
+		}
 	});
-  	res.send('Note '+req.body+' saved.');
 }
 
 function validateUser(input,db) {
@@ -65,17 +67,17 @@ function displayNote(req,res,next) {
 		} else { res.send("Sorry, Credentials Denied"); }
 	});*/
 
-	deployment.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
-		res.send(note.data.toString());
+	note.findOne({ user: req.params.uname, name: req.params.nname },function (err,note) {
+		res.send(note.data);
 	});
 }
 
 function listNotes(req,res,next) { 
-	deployment.find({ user: req.params.uname }, function (err, note) { res.send(note); });
+	note.find({ user: req.params.uname },{ name: 1, datestamp: 1}, function (err, note) { res.send(note); });
 }
 
 function listLatestPerServer(req, res, next) {
-	console.log("Quering..."+req.params.name);
+	console.log(Date.now()+" User: "+req.params.uname+" Note: "+req.params.name+" queried");
 
 	deployment.find({ server: req.params.name }, null, { sort: { datestamp: -1 } },function(err, deploys) { res.send(deploys); });
 }
