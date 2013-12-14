@@ -23,7 +23,7 @@ var userSchema = new mongoose.Schema({
 // // create our configuration object by calling configure based on the environment desired.
 //var config = require('./config.js').configure(env);
 
-var note = mongoose.model('Notess', noteSchema);
+var note = mongoose.model('Notes', noteSchema);
 var users = mongoose.model('Userinfo', userSchema);
 	
 function addNote(req, res, next) {
